@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  createContext, useCallback, useContext, useEffect, useMemo, useState,
+} from 'react';
 
 
 const createDatabase = (event) => {
@@ -9,7 +11,9 @@ const createDatabase = (event) => {
   userStore.createIndex('password', 'password', { unique: false });
 };
 
-const useDB = () => {
+const DatabaseContext = createContext(null);
+
+const DatabaseProvider = ({ children }) => {
 
   const [db, setDb] = useState(null);
 
@@ -29,13 +33,27 @@ const useDB = () => {
     return () => {
       if (db) db.close();
     };
-    // Only run on mount and unmount
-    // eslint-disable-next-line
-  }, []);
+  // Only run on mount and unmount
+  // eslint-disable-next-line
+}, []);
+
+  const value = useMemo(() => ({ db }), [db]);
+
+  return (
+    <DatabaseContext.Provider value={value}>
+      {children}
+    </DatabaseContext.Provider>
+  );
+
+};
+
+const useDB = () => {
+
+  const { db } = useContext(DatabaseContext);
 
   const addData = useCallback(({ table, dataToAdd }) => new Promise((resolve, reject) => {
     if (!db) reject(new Error('DB is not open'));
-    const transaction = db.transaction([table], 'readwrite');
+    const transaction = db.transaction(table, 'readwrite');
 
     const idsAdded = [];
 
@@ -89,14 +107,24 @@ const useDB = () => {
 
   const getDataByIndex = useCallback(({ table, search, column }) => new Promise((resolve, reject) => {
     if (!db) reject(new Error('DB is not open'));
-    const transaction = db.transaction([table]);
+    const transaction = db.transaction([table], 'readonly');
 
     transaction.onerror = () => reject(new Error('Failed to get data'));
 
     const objectStore = transaction.objectStore(table);
     const index = objectStore.index(column);
-    index.get(search).onsuccess = (event) => resolve(event.target.result);
+
+    const request = index.get(search);
+
+    request.onsuccess = (event) => resolve(event.target.result);
+    request.onerror = () => { reject(new Error('Failed to index data')); };
   }), [db]);
+
+  if (!db) {
+    return {
+      loadingDB: true,
+    };
+  }
 
 
   return {
@@ -110,4 +138,6 @@ const useDB = () => {
 
 export {
   useDB,
+  DatabaseProvider,
+  DatabaseContext,
 };
