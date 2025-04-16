@@ -1,0 +1,170 @@
+{
+    "env": {
+      "es2021": true,
+      "node": true,
+      "browser": true
+    },
+    "extends": [
+      "airbnb",
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:import/typescript",
+      "plugin:react/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "plugins": [
+      "import",
+      "@typescript-eslint",
+      "jest"
+    ],
+    "settings": {
+      "import/resolver": {
+        "typescript": {
+          "project": [
+            "./tsconfig.base.json",
+            "./apps/*/tsconfig.json",
+            "./libs/*/tsconfig.json"
+          ],
+          "node": {
+            "extensions": [".js", ".jsx", ".ts", ".tsx", "*.android.ts", "*.ios.ts"]
+          }
+        }
+      }
+    },
+    "rules": {
+      // always put parentheses around arguments in arrow functions as it is more readable
+      "arrow-parens": ["error", "always"],
+      // put else on line AFTER the closing } of preceding if, we find it more readable PLUS it allows inserting comment lines between if and else !!!
+      // https://eslint.org/docs/rules/brace-style
+      "brace-style": ["error", "stroustrup",
+        {
+          "allowSingleLine": true
+        }
+      ],
+      // we see no good reason to enforce this rule
+      // https://eslint.org/docs/rules/class-methods-use-this#enforce-that-class-methods-utilize-this-class-methods-use-this
+      "class-methods-use-this": "off",
+      // named exports are preferred to optimise webpack tree shaking
+      "import/prefer-default-export": "off",
+      // enforce import order to group by location
+      "import/order": ["error", {
+        "groups": [
+          // imports from node and installed packages
+          ["builtin", "external"],
+          // imports from @ocasta-frontends
+          "internal",
+          // imports from within project
+          ["parent", "sibling", "index"]
+        ]
+      }],
+      // "import/no-default-export": "error",
+      // we write code on large screens, it"s more readable to keep statements on 1 line that arbitrarily restrict line length 
+      "max-len": "off",
+      // console logs are useful to help us debug recent code on dev. a function disables all alerts in production builds
+      "no-console": "off",
+      // we reassign classes to use connect on components when we don"t want to rename them
+      "no-class-assign": "off",
+      // this rules imposes unnecesary parentheses because it ignores basic arithmetic operator priority
+      "no-mixed-operators": "off",
+      // feel free to use 2 empty lines to separate groups of functions that go together within a file, for example request/success/error groups
+      "no-multiple-empty-lines": "off",
+      // we allow param reassign to set defaults inside functions
+      // https://blog.javascripting.com/2015/09/07/fine-tuning-airbnbs-eslint-config/
+      "no-param-reassign": "off",
+      // allow ++ in the final expression of for loop
+      "no-plusplus": ["error",
+        {
+          "allowForLoopAfterthoughts": true
+        }
+      ],
+      // turn this rule off if you will never use an object that shadows an Object.prototype method or which does not inherit from Object.prototype
+      // https://eslint.org/docs/rules/no-prototype-builtins#disallow-use-of-objectprototypes-builtins-directly-no-prototype-builtins
+      // this imposes needlessly verbose syntax when the real issue is you should neveer overwrite standard JS prototypes
+      "no-prototype-builtins": "off",
+      // we find ternary more readable than the suggested airbnb alternative
+      "no-unneeded-ternary": "off",
+      // again feels free to use white space for readability and separating logical blocks of code
+      "padded-blocks": "off",
+      // if we get several things out of same object, we prefer destructuring to save repetition
+      // however we see no good reason to enforce destructuring to get 1 thing out of an object, it"s needlessly complicated syntax
+      // and array destructuring syntax is just confusing and unreadable for no actual gain
+      // https://eslint.org/docs/rules/prefer-destructuring
+      "prefer-destructuring": ["off",
+        {
+          "VariableDeclarator": {
+            "array": false,
+            "object": true
+          },
+          "AssignmentExpression": {
+            "array": false,
+            "object": true
+          }
+        },
+        {
+          "enforceForRenamedProperties": false
+        }
+      ],
+      "radix": "off",
+      // this has effectively been replaced by typescript resolver. errors will still happen, but not from this rule
+      "import/no-extraneous-dependencies": "off",
+      // ignore import extensions for typescript files
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "always",
+          "jsx": "never",
+          "ts": "never",
+          "tsx": "never"
+        }
+      ],
+      // this enables the use of underscore dangle in variable names, which is useful for unused variables
+      // or internal access variables
+      "no-underscore-dangle": "off",
+      "dot-notation": "off",
+      "no-shadow": "off",
+      "@typescript-eslint/no-shadow": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "args": "all",
+          "argsIgnorePattern": "^_",
+          "caughtErrors": "all",
+          "caughtErrorsIgnorePattern": "^_",
+          "destructuredArrayIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "ignoreRestSiblings": true
+        }
+      ],
+      "react/jsx-one-expression-per-line": "off"
+    },
+    "overrides": [
+      {
+        // all js files
+        "files": ["*.js", "*.jsx"],
+        "rules": {
+          // configure this rule to allow appending unused variables with an underscore
+          "no-unused-vars": [
+            "error",
+            {
+              "args": "all",
+              "argsIgnorePattern": "^_",
+              "caughtErrors": "all",
+              "caughtErrorsIgnorePattern": "^_",
+              "destructuredArrayIgnorePattern": "^_",
+              "varsIgnorePattern": "^_",
+              "ignoreRestSiblings": true
+            }
+          ]
+        }
+      },
+      // all test files
+      {
+        "files": ["*.spec.ts", "*.spec.tsx", "*.test.ts", "*.test.tsx", "*.test.js", "*.test.jsx"]
+      }
+    ]
+  }

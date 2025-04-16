@@ -1,0 +1,10 @@
+{
+    "eslint.format.enable": true,
+    "files.autoSave": "onFocusChange",
+    "editor.formatOnSave": true,
+    "eslint.problems.shortenToSingleLine": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
+  }
