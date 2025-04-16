@@ -19,7 +19,9 @@
     "plugins": [
       "import",
       "@typescript-eslint",
-      "jest"
+      "jest",
+      "react",
+      "react-hooks"
     ],
     "settings": {
       "import/resolver": {
