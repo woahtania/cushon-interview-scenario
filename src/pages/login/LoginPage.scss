@@ -1,0 +1,20 @@
+@use 'mixins' as mixins;
+
+.login-page-component{
+    width: 800px;
+    margin: 0 auto;
+
+    login-input{
+        width: 100%;
+    }
+
+    .login-password{
+        margin-top: 16px;
+    }
+
+    .login-button{
+        @include mixins.button-primary();
+        margin-top: 16px;
+        float: right;
+    }
+}

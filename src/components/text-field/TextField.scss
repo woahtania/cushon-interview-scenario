@@ -1,0 +1,12 @@
+@use 'mixins' as mixins;
+
+.text-field-component{
+    p{
+        margin:0;
+        font-size: 15px;
+    }
+
+    .text-field-input{
+        @include mixins.input-field();
+    }
+}

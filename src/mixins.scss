@@ -1,0 +1,47 @@
+
+@mixin input-field(){
+    width: calc(100% - (1.45em * 2));
+    background: #fff;
+    color: #333;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-shadow: inset 0px 1px 8px rgba(0, 0, 0, 0.2);
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1.45;
+    outline: none;
+    padding: 0.6em 1.45em 0.7em;
+    transition: .18s ease-out;
+   
+    &:focus{
+        color: #444;
+        border: 1px solid #bbb;
+        box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.01), 0px 0px 8px rgba(0, 0, 0, 0.2);
+    }
+    &:hover{
+        box-shadow: inset 1px 2px 8px rgba(0, 0, 0, 0.02);
+    }
+}
+
+@mixin button-primary(){
+    background: #fff;
+    color: #333;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-shadow: inset 0px 1px 8px rgba(0, 0, 0, 0.2);
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1.45;
+    outline: none;
+    padding: 0.6em 1.45em 0.7em;
+    transition: .18s ease-out;
+   
+    &:focus{
+        color: #444;
+        border: 1px solid #bbb;
+        box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.01), 0px 0px 8px rgba(0, 0, 0, 0.2);
+    }
+    &:hover{
+        box-shadow: inset 1px 2px 8px rgba(0, 0, 0, 0.02);
+    }
+}
