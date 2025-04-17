@@ -45,7 +45,7 @@ const useUserByUsername = ({ enabled, username }) => {
     setError(false);
     setUser(null);
     getDataByIndex({ table: 'user', search: username, column: 'username' })
-      .then((value) => { setUser(value); if (!value)setNotFound(true); }, (e) => { setError(true); console.error(e); });
+      .then((value) => { setUser(value[0]); if (value.length === 0)setNotFound(true); }, (e) => { setError(true); console.error(e); });
   }, [getDataByIndex, username, enabled, loadingDB]);
 
   const isLoading = !error && !user;

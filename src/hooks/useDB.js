@@ -9,6 +9,22 @@ const createDatabase = (event) => {
   const userStore = db.createObjectStore('user', { keyPath: 'id', autoIncrement: true });
   userStore.createIndex('username', 'username', { unique: true });
   userStore.createIndex('password', 'password', { unique: false });
+
+  const isaStore = db.createObjectStore('isa', { keyPath: 'id', autoIncrement: true });
+  isaStore.createIndex('name', 'name', { unique: false });
+  isaStore.createIndex('owner', 'owner', { unique: false });
+
+  const investmentStore = db.createObjectStore('investment', { keyPath: 'id', autoIncrement: true });
+  investmentStore.createIndex('date', 'date', { unique: false });
+  investmentStore.createIndex('isa', 'isa', { unique: false });
+
+  const fundStore = db.createObjectStore('fund', { keyPath: 'id', autoIncrement: true });
+  fundStore.createIndex('name', 'name', { unique: false });
+
+  const fundInvestmentStore = db.createObjectStore('fund_investment', { keyPath: 'id', autoIncrement: true });
+  fundInvestmentStore.createIndex('amount', 'amount', { unique: false });
+  fundInvestmentStore.createIndex('fund_id', 'fund_id', { unique: false });
+  fundInvestmentStore.createIndex('investment_id', 'investment_id', { unique: false });
 };
 
 const DatabaseContext = createContext(null);
@@ -108,16 +124,21 @@ const useDB = () => {
   const getDataByIndex = useCallback(({ table, search, column }) => new Promise((resolve, reject) => {
     if (!db) reject(new Error('DB is not open'));
     const transaction = db.transaction([table], 'readonly');
+    const data = [];
 
     transaction.onerror = () => reject(new Error('Failed to get data'));
 
     const objectStore = transaction.objectStore(table);
     const index = objectStore.index(column);
 
-    const request = index.get(search);
-
-    request.onsuccess = (event) => resolve(event.target.result);
-    request.onerror = () => { reject(new Error('Failed to index data')); };
+    index.openCursor().onsuccess = (event) => {
+      const cursor = event.target.result;
+      if (cursor) {
+        if (cursor.key === search) data.push(cursor.value);
+        cursor.continue();
+      }
+      resolve(data);
+    };
   }), [db]);
 
   if (!db) {
