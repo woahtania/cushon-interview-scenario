@@ -1,0 +1,14 @@
+@use 'mixins' as mixins;
+
+.invest-multi-select-component{
+    margin: 16px;
+    .amount-field{
+        @include mixins.input-field();
+        display: inline;
+        width: 300px;
+        margin-inline-start: 16px;
+    }
+    li{
+        margin-block-end: 4px;
+    }
+}

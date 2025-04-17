@@ -1,7 +1,7 @@
 import React from 'react';
 import './LoginPage.scss';
 import { TextField } from '../../components/text-field/TextField';
-import { SignupLink } from '../../components/SignupLink/SignupLink';
+import { SignupLink } from './SignupLink/SignupLink';
 
 const LoginPage = () => (
   <div className="login-page-component">
