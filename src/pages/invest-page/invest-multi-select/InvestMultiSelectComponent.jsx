@@ -1,10 +1,11 @@
 import {
   useCallback, useContext, useMemo, useState,
 } from 'react';
+import PropTypes from 'prop-types';
 import { InvestPageContext } from '../provider/InvestPageProvider';
 import './InvestMultiSelectComponent.scss';
 
-const InvestMultiSelectComponent = () => {
+const InvestMultiSelectComponent = ({ multiselect = false }) => {
 
   const {
     allFunds,
@@ -28,8 +29,13 @@ const InvestMultiSelectComponent = () => {
       selectedFundIds.delete(key);
     }
 
+    // If no multiselect then move on immediately
+    if (!multiselect) {
+      setPage(1);
+    }
+
     setSelectedFundIds(new Set(selectedFundIds));
-  }, [selectedFundIds]);
+  }, [multiselect, selectedFundIds]);
 
   const allFundsListComponents = useMemo(() => allFunds.map(
     (e) => (
@@ -45,7 +51,7 @@ const InvestMultiSelectComponent = () => {
     (e) => (
       <li key={e.id}>
         {e.name}
-        <input type="text" data-id={e.id} className="amount-field" />
+        <input type="text" data-id={e.id} className="amount-field" placeholder="Amount" />
       </li>
     ),
   ), [fundsWithAmounts]);
@@ -61,10 +67,17 @@ const InvestMultiSelectComponent = () => {
           fundsWithAmountsListComponents
         )}
       </ul>
-      <button type="button" onClick={() => setPage(page === 0 ? 1 : 0)}>page 1</button>
+      { (multiselect && page === 0)
+      && (
+        <button type="button" onClick={() => setPage(1)}>Next</button>
+      )}
     </div>
   );
 
+};
+
+InvestMultiSelectComponent.propTypes = {
+  multiselect: PropTypes.bool,
 };
 
 export {
